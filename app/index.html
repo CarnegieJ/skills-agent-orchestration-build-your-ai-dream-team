@@ -1,121 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Project Pulse</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Pulse</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
       <h1>Project Pulse</h1>
-    </header>
+      <p class="tagline">Real-time health of Mona's projects</p>
+    </div>
+  </header>
 
-    <main class="dashboard" id="dashboard">
-      <!-- Project cards are rendered here by JavaScript -->
-    </main>
+  <main class="dashboard" id="dashboard">
+    <p class="loading">Loading projects…</p>
+  </main>
 
-    <script>
-      (function () {
-        const dashboard = document.getElementById('dashboard');
+  <script>
+    function getPriorityClass(priority) {
+      const map = { 'High': 'priority--high', 'Medium': 'priority--medium', 'Low': 'priority--low' };
+      return map[priority] || '';
+    }
 
-        function escapeHtml(text) {
-          const div = document.createElement('div');
-          div.appendChild(document.createTextNode(String(text)));
-          return div.innerHTML;
+    function renderCard(project) {
+      const name = project.name ?? 'Untitled Project';
+      const owner = project.owner ?? 'Unknown';
+      const status = project.status ?? 'Unknown';
+      const priority = project.priority ?? 'Unknown';
+      const recentActivity = project.recentActivity ?? 'No recent activity.';
+      const description = project.description ?? '';
+      const lastUpdated = project.lastUpdated ?? 'N/A';
+      const priorityClass = getPriorityClass(priority);
+
+      const card = document.createElement('article');
+      card.className = 'project-card';
+      card.innerHTML = `
+        <div class="card-header">
+          <h2 class="card-title">${name}</h2>
+          <span class="status-badge status-${status.toLowerCase().replace(/\s+/g, '-')}">${status}</span>
+        </div>
+        <p class="card-description">${description}</p>
+        <dl class="card-meta">
+          <dt>Owner</dt><dd>${owner}</dd>
+          <dt>Recent activity</dt><dd>${recentActivity}</dd>
+          <dt>Last updated</dt><dd>${lastUpdated}</dd>
+        </dl>
+        <div class="card-footer">
+          <span class="priority ${priorityClass}">&#9650; ${priority}</span>
+        </div>
+      `;
+      return card;
+    }
+
+    const dashboard = document.getElementById('dashboard');
+
+    fetch('project-data.json')
+      .then(function(response) {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+      })
+      .then(function(data) {
+        dashboard.innerHTML = '';
+        const projects = data.projects;
+        if (!projects || projects.length === 0) {
+          dashboard.innerHTML = '<p>No projects found.</p>';
+          return;
         }
-
-        function priorityModifier(priority) {
-          const value = (priority ?? '').toLowerCase();
-          if (value === 'high' || value === 'medium' || value === 'low') {
-            return value;
-          }
-          return 'low';
-        }
-
-        function renderCard(project) {
-          const name         = project.name          ?? 'Untitled Project';
-          const owner        = project.owner         ?? 'Unknown';
-          const status       = project.status        ?? 'Unknown';
-          const priority     = project.priority      ?? 'Low';
-          const activity     = project.recentActivity ?? 'No recent activity recorded.';
-          const description  = project.description   ?? '';
-          const lastUpdated  = project.lastUpdated   ?? 'N/A';
-
-          const card = document.createElement('article');
-          card.className = 'project-card';
-
-          card.innerHTML = `
-            <h2>${escapeHtml(name)}</h2>
-            <p class="project-description">${escapeHtml(description)}</p>
-            <div class="card-meta">
-              <div class="meta-row">
-                <span class="meta-label">Owner</span>
-                <span class="meta-value">${escapeHtml(owner)}</span>
-              </div>
-              <div class="meta-row">
-                <span class="meta-label">Status</span>
-                <span class="status-badge" data-status="${escapeHtml(status)}">${escapeHtml(status)}</span>
-              </div>
-              <div class="meta-row">
-                <span class="meta-label">Priority</span>
-                <span class="priority priority--${escapeHtml(priorityModifier(priority))}">${escapeHtml(priority)}</span>
-              </div>
-              <div class="meta-row">
-                <span class="meta-label">Recent Activity</span>
-                <span class="meta-value">${escapeHtml(activity)}</span>
-              </div>
-              <div class="meta-row">
-                <span class="meta-label">Last Updated</span>
-                <time class="meta-value" datetime="${escapeHtml(lastUpdated)}">${escapeHtml(lastUpdated)}</time>
-              </div>
-            </div>
-          `;
-
-          return card;
-        }
-
-        function renderProjects(data) {
-          dashboard.innerHTML = '';
-
-          const projects = data.projects;
-
-          if (!Array.isArray(projects) || projects.length === 0) {
-            const empty = document.createElement('p');
-            empty.textContent = 'No projects found.';
-            dashboard.appendChild(empty);
-            return;
-          }
-
-          projects.forEach(function (project) {
-            dashboard.appendChild(renderCard(project));
-          });
-        }
-
-        function renderError(message) {
-          dashboard.innerHTML = '';
-          const err = document.createElement('p');
-          err.className = 'load-error';
-          err.textContent = message;
-          dashboard.appendChild(err);
-        }
-
-        fetch('project-data.json')
-          .then(function (response) {
-            if (!response.ok) {
-              throw new Error('Network response was not ok: ' + response.status);
-            }
-            return response.json();
-          })
-          .then(function (data) {
-            renderProjects(data);
-          })
-          .catch(function () {
-            renderError(
-              'Could not load project data. Please open this page via a local server.'
-            );
-          });
-      })();
-    </script>
-  </body>
+        projects.forEach(function(project) {
+          dashboard.appendChild(renderCard(project));
+        });
+      })
+      .catch(function(err) {
+        dashboard.innerHTML = '<p class="error">Could not load project data. Please open this page via a local server (e.g., using the <strong>Run Project Pulse Dashboard</strong> launch configuration).</p>';
+      });
+  </script>
+</body>
 </html>

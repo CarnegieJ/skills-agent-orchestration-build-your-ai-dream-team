@@ -1,57 +1,57 @@
 {
   "projects": [
     {
-      "name": "API Gateway Refactor",
-      "owner": "sarah-chen",
+      "name": "Octocat Onboarding Portal",
+      "owner": "monalisa",
       "status": "On Track",
-      "recentActivity": "Merged PR #142 adding rate-limiting middleware to all public endpoints.",
       "priority": "High",
-      "description": "Refactoring the legacy API gateway to support gRPC and REST simultaneously. The new architecture reduces cold-start latency by 40%.",
+      "recentActivity": "Completed accessibility audit and merged PR #42.",
+      "description": "A self-service onboarding portal that guides new contributors through repository setup, coding standards, and their first pull request.",
       "lastUpdated": "2025-07-10"
     },
     {
-      "name": "Design System v2",
-      "owner": "marco-delgado",
+      "name": "Actions Workflow Library",
+      "owner": "defunkt",
       "status": "On Track",
-      "recentActivity": "Published Storybook build to GitHub Pages; component audit is 80% complete.",
       "priority": "Medium",
-      "description": "Rebuilding the shared component library with accessible-first patterns and full dark-mode support. Targets all internal product teams.",
-      "lastUpdated": "2025-07-09"
-    },
-    {
-      "name": "Data Pipeline Observability",
-      "owner": "priya-nair",
-      "status": "On Track",
-      "recentActivity": "Deployed OpenTelemetry collectors to staging; dashboards are live in Grafana.",
-      "priority": "Medium",
-      "description": "Adding end-to-end tracing and alerting across the ETL pipeline to surface bottlenecks and SLA breaches in real time.",
+      "recentActivity": "Published v2.1.0 of the reusable workflow collection.",
+      "description": "A curated library of reusable GitHub Actions workflows for CI, CD, and security scanning across all internal repositories.",
       "lastUpdated": "2025-07-08"
     },
     {
-      "name": "Mobile App Authentication",
-      "owner": "james-okafor",
-      "status": "At Risk",
-      "recentActivity": "Biometric login failing intermittently on Android 14 devices; investigation ongoing.",
-      "priority": "High",
-      "description": "Implementing passkey and biometric authentication for the iOS and Android apps. Release is gating the Q3 security compliance deadline.",
-      "lastUpdated": "2025-07-10"
+      "name": "Copilot Prompt Handbook",
+      "owner": "mojombo",
+      "status": "On Track",
+      "priority": "Low",
+      "recentActivity": "Added ten new prompt patterns for test generation.",
+      "description": "Living documentation of best-practice Copilot prompts, organised by task type and reviewed monthly by the developer experience team.",
+      "lastUpdated": "2025-07-05"
     },
     {
-      "name": "Search Indexing Service",
-      "owner": "lin-wei",
-      "status": "Blocked",
-      "recentActivity": "Blocked on procurement approval for the Elasticsearch cloud tier upgrade.",
+      "name": "Dependency Upgrade Sprint",
+      "owner": "pjhyett",
+      "status": "At Risk",
       "priority": "High",
-      "description": "Migrating full-text search from a self-hosted Solr cluster to a managed Elasticsearch service. Expected to cut indexing latency by 60%.",
+      "recentActivity": "Three packages blocked on upstream breaking changes — escalated to maintainers.",
+      "description": "Quarterly initiative to upgrade all first-party package dependencies to their latest stable versions and resolve any breaking-change migrations.",
+      "lastUpdated": "2025-07-09"
+    },
+    {
+      "name": "Mobile Responsive Redesign",
+      "owner": "wanstrath",
+      "status": "At Risk",
+      "priority": "Medium",
+      "recentActivity": "Design review flagged contrast issues on the card component — revisions in progress.",
+      "description": "Full responsive overhaul of the main dashboard to meet WCAG 2.1 AA standards and support viewports from 360 px to 1440 px.",
       "lastUpdated": "2025-07-07"
     },
     {
-      "name": "Internal Docs Portal",
-      "owner": "fatima-al-rashid",
-      "status": "On Track",
-      "recentActivity": "Content migration from Confluence is complete; SEO meta tags added to all pages.",
-      "priority": "Low",
-      "description": "Building a static-site documentation portal using Astro and MDX to replace the company's aging Confluence space.",
+      "name": "Legacy API Deprecation",
+      "owner": "holman",
+      "status": "Blocked",
+      "priority": "Medium",
+      "recentActivity": "Waiting on legal sign-off before sending deprecation notices to external consumers.",
+      "description": "Planned retirement of the v1 REST API endpoints, requiring coordinated communication to all registered third-party integrators.",
       "lastUpdated": "2025-07-06"
     }
   ]
