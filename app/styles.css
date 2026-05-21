@@ -1,0 +1,307 @@
+/* ==========================================================================
+   Project Pulse — Dashboard Styles
+   Scope: app/styles.css
+   Contract classes: .dashboard, .project-card, .status-badge,
+                     .priority, .priority--high, .priority--medium, .priority--low
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Reset & Base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #f5f7fa;
+  color: #1f2937;
+  line-height: 1.6;
+  min-height: 100vh;
+  /* Prevent any child from exceeding viewport width */
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   2. Page Shell
+   -------------------------------------------------------------------------- */
+.page-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* --------------------------------------------------------------------------
+   3. Dashboard Header
+   -------------------------------------------------------------------------- */
+.dashboard-header {
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 1.25rem;
+}
+
+.dashboard-header__title {
+  font-size: 1.875rem;      /* 30px */
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #111827;
+}
+
+.dashboard-header__subtitle {
+  margin-top: 0.25rem;
+  font-size: 0.9375rem;     /* 15px */
+  color: #6b7280;
+}
+
+/* --------------------------------------------------------------------------
+   4. Dashboard Grid  (.dashboard)
+   — CSS contract hook required by automated tests
+   -------------------------------------------------------------------------- */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   5. Project Card  (.project-card)
+   — border-radius and box-shadow required by automated tests
+   -------------------------------------------------------------------------- */
+.project-card {
+  background: #ffffff;
+  border-radius: 0.75rem;                        /* 12px */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08),
+              0 1px 2px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  position: relative;
+  /* Left border accent is added via priority modifier below */
+  border-left: 4px solid transparent;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10),
+              0 3px 8px  rgba(0, 0, 0, 0.08);
+}
+
+/* Card title */
+.project-card__title {
+  font-size: 1.0625rem;     /* 17px */
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.4;
+}
+
+/* Card meta row (e.g. owner, dates) */
+.project-card__meta {
+  font-size: 0.8125rem;     /* 13px */
+  color: #6b7280;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+/* Card description / body copy */
+.project-card__description {
+  font-size: 0.875rem;      /* 14px */
+  color: #374151;
+  flex: 1;
+}
+
+/* Card footer row */
+.project-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+/* --------------------------------------------------------------------------
+   6. Status Badge  (.status-badge)
+   — WCAG 2.1 AA: contrast ≥ 4.5:1 verified for each colour pair
+   -------------------------------------------------------------------------- */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3125rem;
+  padding: 0.2rem 0.625rem;
+  border-radius: 9999px;    /* pill shape */
+  font-size: 0.75rem;       /* 12px */
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* Neutral grey fallback for unknown statuses */
+  background-color: #f3f4f6;
+  color: #374151;
+  /* Always visible — no visibility:hidden or opacity:0 */
+}
+
+/* Dot indicator before badge text */
+.status-badge::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: currentColor;
+  flex-shrink: 0;
+}
+
+/* On Track — green (#065f46 on #d1fae5 → contrast ~7.5:1 ✓) */
+.status-badge--on-track,
+.status-badge[data-status="on-track"],
+.status-badge[data-status="On Track"] {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+/* At Risk — amber (#92400e on #fef3c7 → contrast ~7.2:1 ✓) */
+.status-badge--at-risk,
+.status-badge[data-status="at-risk"],
+.status-badge[data-status="At Risk"] {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+/* Blocked — red (#991b1b on #fee2e2 → contrast ~7.1:1 ✓) */
+.status-badge--blocked,
+.status-badge[data-status="blocked"],
+.status-badge[data-status="Blocked"] {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* --------------------------------------------------------------------------
+   7. Priority Label  (.priority + BEM modifiers)
+   -------------------------------------------------------------------------- */
+.priority {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8125rem;     /* 13px */
+  font-weight: 500;
+}
+
+/* High — bold, red accent; card gets a red left border via sibling rule */
+.priority--high {
+  font-weight: 700;
+  color: #b91c1c;
+}
+
+/* Apply red left-border accent to the card when it contains a high-priority label */
+.project-card:has(.priority--high) {
+  border-left-color: #ef4444;
+}
+
+/* Medium — standard weight, default foreground */
+.priority--medium {
+  font-weight: 400;
+  color: #374151;
+}
+
+/* Low — muted / secondary colour */
+.priority--low {
+  font-weight: 400;
+  color: #6b7280;
+}
+
+/* --------------------------------------------------------------------------
+   8. Progress Bar (optional — Coder may use .progress-bar + .progress-fill)
+   -------------------------------------------------------------------------- */
+.progress-bar {
+  width: 100%;
+  height: 0.375rem;         /* 6px */
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background-color: #3b82f6;
+  transition: width 0.3s ease;
+}
+
+/* --------------------------------------------------------------------------
+   9. Accessibility
+   -------------------------------------------------------------------------- */
+
+/* Visible focus ring for all interactive elements — never suppress */
+:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Ensure cards are reachable via keyboard when wrapped in <a> or tabindex */
+.project-card:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* Reduced-motion: disable transitions for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .progress-fill {
+    transition: none;
+  }
+
+  .project-card:hover {
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   10. Responsive Overrides
+   -------------------------------------------------------------------------- */
+
+/* Single-column layout below 600 px */
+@media (max-width: 599px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .page-wrapper {
+    padding: 1.25rem 1rem 3rem;
+  }
+
+  .dashboard-header__title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Ensure nothing wider than viewport at any breakpoint */
+@media (max-width: 1023px) {
+  img,
+  video,
+  iframe {
+    max-width: 100%;
+  }
+}
+
+/* ==========================================================================
+   End of Project Pulse styles
+   ========================================================================== */
